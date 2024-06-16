@@ -1,15 +1,15 @@
-const express = require("express");
+const express = require('express');
+require('dotenv');
+// const router = require('./src/routes');
 const app = express();
-require('dotenv')
-const port = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.post('/users', (req, res) => {
-    res.status(200).json({username:"Rajgeer kumar", email:'rajgeerpaswan123@gmail.com'});
-})
-app.get('/', (req, res) => {
-    res.send('Hi Welcome to all')
-})
-app.listen(port, ()=> {
-    console.log("App is running on ", port );
-})
+app.use(express.urlencoded({extended : false}));
+app.use('/apis', router);
+// app.get('/home', (req, res) => {
+//     res.send('Welcome to Home');
+// })
+app.listen(PORT, () => {
+    console.log(`Load balancer running on port ${PORT}`);
+});
