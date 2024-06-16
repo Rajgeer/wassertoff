@@ -1,21 +1,31 @@
-// src/middlewares/loadBalancerMiddleware.js
-const { userController, postController } = require('../controllers');
-
-let counter = 0;
-
-module.exports = (req, res, next) => {
-    // Example: Route based on URL pattern
-    if (req.path.startsWith('/users')) {
-        return userController.handleRequest(req, res, next);
-    } else if (req.path.startsWith('/posts')) {
-        return postController.handleRequest(req, res, next);
+const dotenv = require("dotenv");
+const jwt = require("jsonwebtoken");
+const User = require("../models/UserModel");
+dotenv.config();
+class Authority {
+  static async userAuth(req, res, next) {
+    if (req.header("Authorization")) {
+      const auth = req.header("Authorization");
+      const parts = auth?.split(" ");
+      const bearer = parts?.[0];
+      const token = parts?.[1];
+      if (bearer === "Bearer") {
+        if (!token) {
+          return res.status(401).json({ message: "Unauthorized" });
+        }
+        try {
+          const decoded = jwt.verify(token, process.env.SECRET_KEY);
+          console.log({ decoded });
+          const { id } = decoded;
+          if (!id) {
+            return res.status(401).json({ message: "Access denied" });
+          }
+          next();
+        } catch (error) {
+          res.status(401).json({ message: "Invalid token" });
+        }
+      }
     }
-
-    // Simple round-robin logic
-    counter = (counter + 1) % 2;
-    if (counter === 0) {
-        return userController.handleRequest(req, res, next);
-    } else {
-        return postController.handleRequest(req, res, next);
-    }
-};
+  }
+}
+module.exports= Authority;

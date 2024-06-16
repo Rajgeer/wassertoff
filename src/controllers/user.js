@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const UserModel = require('../models/UserModel');
+const dotenv = require('dotenv');
+dotenv.config();
 // const config = require('../config');
 class UserController {
     static async signUp(req, res){
