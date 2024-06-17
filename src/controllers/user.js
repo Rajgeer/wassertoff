@@ -4,12 +4,20 @@ const UserModel = require('../models/UserModel');
 // const config = require('../config');
 class UserController {
     static async signUp(req, res){
+        console.log({body:req.body});
         try {
-            const user = await UserModel.findOne({ email:req.body?.email });
-            if(user) return res.status(400).json({ message: "User already exists" });
-            const newUser= await UserModel.create(req.body);
-            const token =jwt.sign({id: newUser.id }, !process.env.SECRET_KEY, { expiresIn: "2h" });
-            res.status(201).json({id: newUser.id, email:newUser.email, fullName:newUser.fullName, token});
+            const {fullName, email, password} = req.body;
+            const user = await UserModel.findOne({ email });
+            if(user){
+                res.status(400).json({ message: "User already exists" });
+            }else {
+                console.log('Hjsafa sfsjakskfafFaf aFa');
+                const newUser= await UserModel.create({fullName, email, password});
+                console.log('after create');
+                const token =jwt.sign({id: newUser.id }, process.env.SECRET_KEY, { expiresIn: "2h" });
+                console.log('after token');
+                res.status(201).json({id: newUser.id, token});
+            }
         } catch (error) {
             res.status(500).json({ error, message: "Server error" });  
         }
@@ -27,7 +35,7 @@ class UserController {
                     res.status(400)
                     .json({ values: null, success: false, message: "Wrong crendetials" });
                 }
-                const token =jwt.sign({id: user._id }, !process.env.SECRET_KEY, { expiresIn: "2h" });
+                const token =jwt.sign({id: user._id }, process.env.SECRET_KEY, { expiresIn: "2h" });
                 res.status(201).json({id: user._id, email:user.email, fullName:user.fullName, token});
             }
         } catch (error) {

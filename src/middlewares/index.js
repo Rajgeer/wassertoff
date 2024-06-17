@@ -12,7 +12,7 @@ class Authority {
           return res.status(401).json({ message: "Unauthorized" });
         }
         try {
-          const decoded = jwt.verify(token, !process.env.SECRET_KEY);
+          const decoded = jwt.verify(token, process.env.SECRET_KEY);
           console.log({ decoded });
           const { id } = decoded;
           if (!id) {

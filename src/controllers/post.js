@@ -23,7 +23,7 @@ class PostController {
   }
   static async getPosts(req, res) {
     try {
-      const posts = await PostModel.find().exec();
+      const posts = await PostModel.find().populate('userId', '_id fullName email').exec();
       res.status(200).json({ success: true, data: posts });
     } catch (error) {
       res.status(500).json({ error, message: "Server error" });
