@@ -9,7 +9,7 @@
   POST `/apis/products/` ---> create product with auth Bearer token          
   GET `/apis/products/`  ---> get all products
   GET `/apis/products/:id` ---> get products by product id
-  PUST `/apis/products/:id` ---> update product by id and data:{ name, price, description, inStock}
+  PUT `/apis/products/:id` ---> update product by id and data:{ name, price, description, inStock}
   DELETE `/apis/products/:id` ---> delete product by id
 3~ Category Apis
   POST `/apis/categories` ---> create category with auth Bearer token
