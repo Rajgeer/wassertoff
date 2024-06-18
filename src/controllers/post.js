@@ -2,7 +2,6 @@ const PostModel = require("../models/PostModel");
 class PostController {
   static async addPost(req, res) {
     try {
-      console.log({ body: req.body, userId: req.query.userId });
       const { title, content } = req.body;
       const post = new PostModel({ title, content, userId: req.query.userId });
       await post.save();
